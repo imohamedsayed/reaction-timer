@@ -1,17 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>MSO Reaction Timer</h1>
+  <button @click="start" :disabled="isPlaying">Play</button>
+  <div v-if="isPlaying">
+    <Block :delay="delay" @end="endGame" />
+  </div>
+  <Result v-if="showResults" :score="score" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Block from "./components/Block.vue";
+import Result from "./components/Result.vue";
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      isPlaying: false,
+      delay: null,
+      score: null,
+      showResults: false,
+    };
+  },
   components: {
-    HelloWorld
-  }
-}
+    Block,
+    Result,
+    Result,
+  },
+  methods: {
+    start() {
+      this.delay = 2000 + Math.random() * 5000;
+      this.isPlaying = true;
+      this.showResults = false;
+    },
+    endGame(reactionTime) {
+      this.isPlaying = false;
+      this.score = reactionTime;
+      this.showResults = true;
+    },
+  },
+};
 </script>
 
 <style>
@@ -22,5 +48,18 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+button {
+  width: 200px;
+  height: 40px;
+  background-color: #0faf87;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+button:disabled {
+  background-color: #0faf8747;
+  cursor: not-allowed;
 }
 </style>
